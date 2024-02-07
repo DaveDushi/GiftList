@@ -5,8 +5,6 @@ const MerkleTree = require("../utils/MerkleTree");
 const serverUrl = "http://localhost:1225";
 
 async function main() {
-  // TODO: how do we prove to the server we're on the nice list?
-  // Check if the user has provided an argument
   const merkleTree = new MerkleTree(niceList);
   const root = merkleTree.getRoot();
   let name = "";
@@ -15,7 +13,6 @@ async function main() {
   if (process.argv.length < 3) {
     console.log("Please provide an argument.");
   } else {
-    // Get the user input (argument)
     name = process.argv[2];
   }
 
@@ -23,6 +20,7 @@ async function main() {
   const index = niceList.findIndex((n) => n === name);
   const proof = merkleTree.getProof(index);
 
+  // send the proof name and index to the server to verify the proof
   const { data: gift } = await axios.post(`${serverUrl}/gift`, {
     proof,
     name,
